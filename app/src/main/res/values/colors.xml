@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#f11a3a</color>
+    <color name="blue">#9fcdf8</color>
+    <color name="white">#ffffff</color>
+    <color name="soft_blue">#9fcdf8</color>
+    <color name="black">#000000</color>
+    <color name="gray">#e7edf2</color>
+    <color name="soft_moov">#D7B3F1</color>
+    <color name="soft_grad">#B986DB</color>
+    <color name="moov">#3B0760</color>
+    <color name="moov_two">#2A0A45</color>
+    <color name="moov_three">#8F3FC4</color>
+    <color name="backg">#7e38ad</color>
+    <color name="back_comment">#65569a</color>
+    <color name="front_comment">#8f89b1</color>
+    <color name="samawy">#e7edf2</color>
+    <color name="gray_two">#e6e3e8</color>
+</resources>

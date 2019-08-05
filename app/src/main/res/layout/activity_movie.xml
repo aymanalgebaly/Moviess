@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_three"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.MovieActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rel_movie_activity">
+
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:id="@+id/view_pager_img_movie_activity"
+        android:layout_height="250dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"/>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:layout_below="@id/view_pager_img_movie_activity"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rating"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"/>
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:id="@+id/rating_bar_movie_activity"
+            android:padding="5dp"
+            style="@style/Widget.MaterialRatingBar.RatingBar" />
+
+        <TextView
+            android:id="@+id/num_home_Movie_Activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/5"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_above="@id/lin_btns"
+        android:layout_below="@id/rel_movie_activity">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/appBar_movie_activity">
+
+            <android.support.design.widget.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabs"
+                app:tabTextColor="@color/white"
+                android:background="@color/moov_three">
+
+            </android.support.design.widget.TabLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/viewPager_movie_activity"
+            android:layout_below="@id/appBar_movie_activity">
+
+        </android.support.v4.view.ViewPager>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_btns"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/add_watchList"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/watchlist"
+            android:layout_marginEnd="5dp"
+            android:background="@color/moov_three"
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:drawableTint="@color/white"
+            android:drawableStart="@drawable/ic_add_black_24dp"
+            android:layout_marginStart="20dp"/>
+
+        <Button
+            android:id="@+id/rate_btn_movie_activity"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/moov_three"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:text="@string/rate_now" />
+    </LinearLayout>
+
+</RelativeLayout>
