@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MyRatesResponse implements Parcelable {
+public class MyRatesResponse {
 
     @SerializedName("id")
     @Expose
@@ -55,39 +55,6 @@ public class MyRatesResponse implements Parcelable {
     @Expose
     private String duration;
 
-    protected MyRatesResponse(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readInt();
-        }
-        name = in.readString();
-        des = in.readString();
-        type = in.readString();
-        rate = in.readString();
-        img1 = in.readString();
-        img2 = in.readString();
-        img3 = in.readString();
-        img4 = in.readString();
-        datee = in.readString();
-        category = in.readString();
-        releaseDate = in.readString();
-        ageRate = in.readString();
-        language = in.readString();
-        duration = in.readString();
-    }
-
-    public static final Creator<MyRatesResponse> CREATOR = new Creator<MyRatesResponse>() {
-        @Override
-        public MyRatesResponse createFromParcel(Parcel in) {
-            return new MyRatesResponse(in);
-        }
-
-        @Override
-        public MyRatesResponse[] newArray(int size) {
-            return new MyRatesResponse[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -207,34 +174,5 @@ public class MyRatesResponse implements Parcelable {
 
     public void setDuration(String duration) {
         this.duration = duration;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id);
-        }
-        dest.writeString(name);
-        dest.writeString(des);
-        dest.writeString(type);
-        dest.writeString(rate);
-        dest.writeString(img1);
-        dest.writeString(img2);
-        dest.writeString(img3);
-        dest.writeString(img4);
-        dest.writeString(datee);
-        dest.writeString(category);
-        dest.writeString(releaseDate);
-        dest.writeString(ageRate);
-        dest.writeString(language);
-        dest.writeString(duration);
     }
 }

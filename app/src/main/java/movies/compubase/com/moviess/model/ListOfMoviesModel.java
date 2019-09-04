@@ -1,6 +1,9 @@
 
 package movies.compubase.com.moviess.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -51,6 +54,7 @@ public class ListOfMoviesModel {
     @SerializedName("duration")
     @Expose
     private String duration;
+
 
     public Integer getId() {
         return id;

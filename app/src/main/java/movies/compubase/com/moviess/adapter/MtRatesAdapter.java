@@ -50,7 +50,7 @@ public class MtRatesAdapter extends RecyclerView.Adapter<MtRatesAdapter.ViewHold
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ViewMyRatesActivity.class);
-                intent.putExtra("ratesResponse",myRatesResponse);
+//                intent.putExtra("ratesResponse",myRatesResponse);
                 context.startActivity(intent);
             }
         });
