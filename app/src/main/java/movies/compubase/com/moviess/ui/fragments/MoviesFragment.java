@@ -46,7 +46,7 @@ public class MoviesFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         setupRecycler();
-        fetchData();
+//        fetchData();
 
         return view;
     }
@@ -60,20 +60,20 @@ public class MoviesFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
     }
-    private void fetchData (){
-        List<HomeModel> homeModels = new ArrayList<>();
-
-        img = new int[]{R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
-                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
-                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers};
-        num = new int[]{1, 2, 3, 4, 5, 1, 2, 3, 4};
-
-        for ( i = 0; i <img.length ; i++) {
-            homeModels.add(new HomeModel(img[i],num[i]));
-        }
-        adapter.setData(homeModels);
-        adapter.notifyDataSetChanged();
-    }
+//    private void fetchData (){
+//        List<HomeModel> homeModels = new ArrayList<>();
+//
+//        img = new int[]{R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
+//                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
+//                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers};
+//        num = new int[]{1, 2, 3, 4, 5, 1, 2, 3, 4};
+//
+//        for ( i = 0; i <img.length ; i++) {
+//            homeModels.add(new HomeModel(img[i],num[i]));
+//        }
+//        adapter.setData(homeModels);
+//        adapter.notifyDataSetChanged();
+//    }
 
     @Override
     public void onDestroyView() {

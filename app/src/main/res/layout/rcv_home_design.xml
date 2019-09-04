@@ -43,15 +43,19 @@
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:layout_width="80dp"
+            android:id="@+id/rateBar_home"
             android:layout_height="30dp"
             android:padding="5dp"
+            android:isIndicator="true"
+            android:stepSize="0.5"
+            android:numStars="5"
             style="@style/Widget.MaterialRatingBar.RatingBar" />
 
         <TextView
             android:id="@+id/num_home_rcv_design"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.5"
+            android:text=""
             android:textStyle="bold"
             android:textSize="14sp"
             android:layout_gravity="center_vertical" />

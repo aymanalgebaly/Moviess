@@ -62,9 +62,15 @@
     <group android:checkableBehavior="single">
 
         <item
-            app:showAsAction="always"
-            android:id="@+id/layout"
-            android:title=""
+            android:id="@+id/layout_arabic"
+            android:title="@string/arabic"
+            android:icon="@drawable/arab"
+            android:actionLayout="@layout/menu_navigation">
+        </item>
+        <item
+            android:id="@+id/layout_english"
+            android:title="@string/english"
+            android:icon="@drawable/eng"
             android:actionLayout="@layout/menu_navigation">
         </item>
 

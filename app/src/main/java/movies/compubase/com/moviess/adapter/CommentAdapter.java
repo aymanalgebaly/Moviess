@@ -17,15 +17,20 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.model.CommentModel;
+import movies.compubase.com.moviess.model.ListOfComment;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolderCommentadapter> {
 
     private Context context;
-    private List<CommentModel>commentModelList;
+    private List<ListOfComment>listOfCommentList;
 
-    public CommentAdapter(Context context, List<CommentModel> commentModelList) {
+    public CommentAdapter(List<ListOfComment> listOfCommentList) {
+        this.listOfCommentList = listOfCommentList;
+    }
+
+    public CommentAdapter(Context context, List<ListOfComment> listOfComments) {
         this.context = context;
-        this.commentModelList = commentModelList;
+        this.listOfCommentList = listOfComments;
     }
 
     public CommentAdapter(Context context) {
@@ -35,6 +40,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolderCommentadapter onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+        context = viewGroup.getContext();
+
         View view = LayoutInflater.from(context).inflate(R.layout.comment_design, viewGroup, false);
         return new ViewHolderCommentadapter(view);
     }
@@ -43,22 +51,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolderCommentadapter viewHolderCommentadapter, int i) {
 
-        CommentModel commentModel = commentModelList.get(i);
+        ListOfComment listOfComment = listOfCommentList.get(i);
 
-        Picasso.get().load(commentModel.getImg()).into(viewHolderCommentadapter.img);
+//        Picasso.get().load(listOfComment.).into(viewHolderCommentadapter.img);
 
-        viewHolderCommentadapter.rate_num.setText(Integer.toString(commentModel.getRat()));
-        viewHolderCommentadapter.comment.setText(commentModel.getComment());
+        viewHolderCommentadapter.rate_num.setText(listOfComment.getRate());
+        viewHolderCommentadapter.comment.setText(listOfComment.getComment());
     }
 
     @Override
     public int getItemCount() {
-        return commentModelList != null ? commentModelList.size():0;
+        return listOfCommentList != null ? listOfCommentList.size():0;
     }
 
-    public void setData(List<CommentModel> commentModels) {
-        this.commentModelList = commentModels;
-    }
+//    public void setData(List<CommentModel> commentModels) {
+//        this.commentModelList = commentModels;
+//    }
 
     public class ViewHolderCommentadapter extends RecyclerView.ViewHolder {
 

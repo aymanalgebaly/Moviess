@@ -9,8 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -19,8 +25,16 @@ import butterknife.Unbinder;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.adapter.CommentAdapter;
 import movies.compubase.com.moviess.adapter.HomeAdapter;
+import movies.compubase.com.moviess.data.API;
+import movies.compubase.com.moviess.helper.RetrofitClient;
 import movies.compubase.com.moviess.model.CommentModel;
 import movies.compubase.com.moviess.model.HomeModel;
+import movies.compubase.com.moviess.model.ListOfComment;
+import movies.compubase.com.moviess.model.ListOfMoviesModel;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +48,8 @@ public class CommentsFragment extends Fragment {
     private CommentAdapter adapter;
     private int[] img,num;
     private String[] comments;
+    private ListOfComment listOfComment;
+    private ArrayList<ListOfComment>listOfCommentArrayList = new ArrayList<>();
 
     public CommentsFragment() {
         // Required empty public constructor
@@ -58,29 +74,61 @@ public class CommentsFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rcvComments.setLayoutManager(linearLayoutManager);
-        adapter = new CommentAdapter(getActivity());
-        rcvComments.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+//        adapter = new CommentAdapter(getActivity());
+//        rcvComments.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
     }
 
     private void fetchData() {
-        List<CommentModel> commentModels = new ArrayList<>();
+        Call<ResponseBody> call2 = RetrofitClient.getInstant().create(API.class).ListOfMovies();
 
-        img = new int[]{R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
-                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers,
-                R.drawable.titanic, R.drawable.anti_man, R.drawable.avengers};
-        num = new int[]{1, 2, 3, 4, 5, 1, 2, 3, 4};
+        call2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-        comments = new String []{"Nice Movie","Nice Movie","Nice Movie","Nice Movie","Nice Movie","Nice Movie"
-        ,"Nice Movie","Nice Movie","Nice Movie"};
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
 
-        for (int i = 0; i < img.length; i++) {
-            commentModels.add(new CommentModel(img[i], num[i],comments[i]));
-        }
-        adapter.setData(commentModels);
-        adapter.notifyDataSetChanged();
+
+                try {
+                    assert response.body() != null;
+                    List<ListOfComment> listOfComments = Arrays.asList(gson.fromJson(response.body().string(), ListOfComment[].class));
+
+                    if (response.isSuccessful()) {
+
+
+                        for (int j = 0; j < listOfComments.size(); j++) {
+
+                            listOfComment = new ListOfComment();
+
+                            listOfComment.setComment(listOfComments.get(j).getComment());
+                            listOfComment.setRate(listOfComments.get(j).getRate());
+                            listOfComment.setIdMovie(listOfComments.get(j).getIdMovie());
+                            listOfComment.setId(listOfComments.get(j).getId());
+                            listOfComment.setIdUser(listOfComments.get(j).getIdUser());
+                        }
+
+                        listOfCommentArrayList.add(listOfComment);
+
+                    }
+                    adapter = new CommentAdapter(listOfCommentArrayList);
+                    rcvComments.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     @Override
     public void onDestroyView() {

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backg"
+    tools:context=".ui.activities.ViewMyRatesActivity">
+
+    <ImageView
+        android:id="@+id/img_movie_myrates_design"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="250dp" />
+
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_below="@id/img_movie_myrates_design"
+        android:id="@+id/rating_bar_rate_design"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/rating_bar_rate_design"
+        android:id="@+id/txt_value_comment_view"
+        android:layout_margin="10dp"
+        />
+
+</RelativeLayout>
