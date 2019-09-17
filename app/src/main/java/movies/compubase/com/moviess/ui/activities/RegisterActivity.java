@@ -1,6 +1,9 @@
 package movies.compubase.com.moviess.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -17,8 +20,10 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.paperdb.Paper;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.data.API;
+import movies.compubase.com.moviess.helper.LocalHelper;
 import movies.compubase.com.moviess.helper.RetrofitClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -50,7 +55,13 @@ public class RegisterActivity extends AppCompatActivity {
     TextView registerBtnRegister;
     @BindView(R.id.login_btn_register)
     TextView loginBtnRegister;
-    private String fristname,lastname,userName,mail,phone,pass;
+    @BindView(R.id.reg_txt)
+    TextView regTxt;
+    @BindView(R.id.if_you_reg)
+    TextView ifYouReg;
+    private String fristname, lastname, userName, mail, phone, pass;
+    private SharedPreferences preferences;
+    private String lannguage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,34 @@ public class RegisterActivity extends AppCompatActivity {
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        preferences = getSharedPreferences("user", MODE_PRIVATE);
+        lannguage = preferences.getString("lan", "");
+
+        if (lannguage == null) {
+            Paper.book().write("language", "en");
+
+        } else {
+            Paper.book().write("language", "ar");
+            updateView((String) Paper.book().read("language"));
+        }
+
+    }
+
+    private void updateView(String language) {
+        Context context = LocalHelper.setLocale(this, language);
+        Resources resources = context.getResources();
+
+        regTxt.setText(resources.getString(R.string.registration));
+        usernameRegiser.setHint(resources.getString(R.string.username));
+        lastNameEdit.setHint(resources.getString(R.string.last_name));
+        firstNameEdit.setHint(resources.getString(R.string.first_name));
+        phoneRegiser.setHint(resources.getString(R.string.phone_number));
+        mailRegiser.setHint(resources.getString(R.string.email));
+        passRegiser.setHint(resources.getString(R.string.password));
+        termsTxt.setText(resources.getString(R.string.terms_and_conditions));
+        registerBtnRegister.setText(resources.getString(R.string.register));
+        ifYouReg.setText(resources.getString(R.string.if_you_have_an_account));
+        loginBtnRegister.setText(resources.getString(R.string.login));
     }
 
     private void ValidateCenter() {
@@ -78,15 +117,14 @@ public class RegisterActivity extends AppCompatActivity {
             usernameRegiser.setError("Username is required");
         } else if (TextUtils.isEmpty(mail)) {
             mailRegiser.setError("Email is required");
-        } else if (TextUtils.isEmpty(phone)){
+        } else if (TextUtils.isEmpty(phone)) {
             phoneRegiser.setError("Phone Number is required");
-        }
-        else if (TextUtils.isEmpty(pass)){
+        } else if (TextUtils.isEmpty(pass)) {
             passRegiser.setError("Password is required");
-        }else {
+        } else {
             Retrofit retrofit = RetrofitClient.getInstant();
             API api = retrofit.create(API.class);
-            Call<ResponseBody> responseBodyCall = api.register(userName,fristname,lastname,mail,pass,phone,"image");
+            Call<ResponseBody> responseBodyCall = api.register(userName, fristname, lastname, mail, pass, phone, "image");
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -101,8 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (string.equals("True")) {
 //                                onBackPressed();
                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                            }else
-                            {
+                            } else {
                                 Toast.makeText(RegisterActivity.this, string, Toast.LENGTH_SHORT).show();
                             }
                         } catch (IOException e) {
@@ -129,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                startActivity(new Intent(RegisterActivity.this,HomeActivity.class));
                 break;
             case R.id.login_btn_register:
-                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 break;
         }
     }

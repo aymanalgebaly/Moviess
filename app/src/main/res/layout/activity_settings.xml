@@ -24,23 +24,24 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="@string/welcome"
+            android:id="@+id/txt_settings"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/soft_blue"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:id="@+id/user_img"
-            android:background="@mipmap/ic_launcher"
             android:layout_marginStart="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ayman"
+            android:text=""
             android:id="@+id/name_value"
+            android:gravity="center_horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
@@ -153,6 +154,7 @@
             android:layout_marginTop="40dp"
             android:text="@string/back"
             android:textSize="16sp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/btn_back"/>
 
     </LinearLayout>

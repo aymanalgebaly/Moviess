@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/logo_img_login"
             android:text="@string/log_in"
+            android:id="@+id/login_txt"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -89,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/if_you_don_t_have_account"
+            android:id="@+id/if_you"
             android:layout_marginTop="50dp"
             android:textColor="@color/gray"
             android:gravity="center"/>

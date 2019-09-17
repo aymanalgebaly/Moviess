@@ -2,9 +2,11 @@ package movies.compubase.com.moviess.ui.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -37,8 +41,10 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.paperdb.Paper;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.data.API;
+import movies.compubase.com.moviess.helper.LocalHelper;
 import movies.compubase.com.moviess.helper.RetrofitClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -70,6 +76,8 @@ public class settingsActivity extends AppCompatActivity {
     Button btnBack;
     @BindView(R.id.mail_edit)
     EditText mailEdit;
+    @BindView(R.id.txt_settings)
+    TextView txtSettings;
 
     private int GALLERY_REQUEST_CODE = 1;
 
@@ -80,14 +88,19 @@ public class settingsActivity extends AppCompatActivity {
     FirebaseStorage storage;
 
     Uri filePath;
+    private String language;
 
-    String imageURL;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.onAttach(newBase, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -113,10 +126,34 @@ public class settingsActivity extends AppCompatActivity {
         phoneEdit.setText(phone);
         passEdit.setText(pass);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        nameValue.setText(username);
+
+        language = Paper.book().read("language");
+        if (language == null) {
+            Paper.book().write("language", "en");
+        } else {
+            Paper.book().write("language", "ar");
+            updateView((String) Paper.book().read("language"));
         }
 
+
+        Glide.with(settingsActivity.this).load(image).placeholder(R.drawable.user_defualt_img).into(userImg);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+
+    }
+
+    private void updateView(String language) {
+
+        Context context = LocalHelper.setLocale(this, language);
+        Resources resources = context.getResources();
+
+        txtSettings.setText(resources.getString(R.string.welcome));
+        btnSave.setText(resources.getString(R.string.save));
+        btnBack.setText(resources.getString(R.string.back));
     }
 
     @OnClick({R.id.user_img, R.id.btn_save, R.id.btn_back})
@@ -143,14 +180,14 @@ public class settingsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
                         String string = response.body().string();
 
-                        if (string.equals("True")){
+                        if (string.equals("True")) {
                             Toast.makeText(settingsActivity.this, "Updated", Toast.LENGTH_SHORT).show();
 
-                            startActivity(new Intent(settingsActivity.this,HomeActivity.class));
+                            startActivity(new Intent(settingsActivity.this, HomeActivity.class));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -173,13 +210,11 @@ public class settingsActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null)
-        {
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
 
             Bitmap bitmap;
@@ -192,8 +227,6 @@ public class settingsActivity extends AppCompatActivity {
 
                 uploadImage(filePath);
 
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -201,55 +234,49 @@ public class settingsActivity extends AppCompatActivity {
         }
     }
 
-
     private void uploadImage(Uri customfilepath) {
 
-        if(customfilepath != null)
-        {
+        if (customfilepath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
 
-            final StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
-            ref.putFile(customfilepath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+
+            ref.putFile(customfilepath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(Uri uri) {
 
-                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            progressDialog.dismiss();
 
-                                @Override
-                                public void onSuccess(Uri uri) {
+                            Toast.makeText(settingsActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
 
-                                    progressDialog.dismiss();
+                            image = uri.toString();
 
-                                    Toast.makeText(settingsActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
 
-                                    image = uri.toString();
+                            preferences = getSharedPreferences("user", MODE_PRIVATE);
 
-                                    SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
+                            editor.putBoolean("login", true);
 
-                                    preferences = getSharedPreferences("user", MODE_PRIVATE);
+                            editor.putString("image", image);
 
-                                    editor.putBoolean("login", true);
+                            editor.apply();
 
-                                    editor.putString("image", image);
-//                                    editor.putString("name",username);
-//                                    editor.putString("email",email);
-//                                    editor.putString("phone",phone);
-//                                    editor.putString("pass",pass);
-
-                                    editor.apply();
-
-                                    Glide.with(settingsActivity.this).load(image).placeholder(R.drawable.anti_man).into(userImg);
-
-                                }
-                            });
+                            Glide.with(settingsActivity.this).load(image).into(userImg);
 
                         }
-                    })
+                    });
+
+                }
+            })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -261,11 +288,25 @@ public class settingsActivity extends AppCompatActivity {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        usernameEdit.setText(username);
+        firstNameEdit.setText(fname);
+        lastNameEdit.setText(lname);
+        mailEdit.setText(email);
+        phoneEdit.setText(phone);
+        passEdit.setText(pass);
+
+        nameValue.setText(username);
     }
 }

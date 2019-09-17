@@ -122,6 +122,7 @@ public class MyRateFragment extends Fragment {
                         adapter = new MtRatesAdapter(myRatesResponseList);
                         myRateRcv.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
+
                         Toast.makeText(getActivity(), String.valueOf(id), Toast.LENGTH_SHORT).show();
                     }
 

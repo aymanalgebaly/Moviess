@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
     private void fetchData() {
 
 
-//        listOfMoviesModelArrayList.clear();
+        listOfMoviesModelArrayList.clear();
 
         Call<ResponseBody> call2 = RetrofitClient.getInstant().create(API.class).ListOfMovies();
 

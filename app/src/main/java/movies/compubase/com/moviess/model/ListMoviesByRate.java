@@ -4,29 +4,11 @@ package movies.compubase.com.moviess.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MyRatesResponse {
+public class ListMoviesByRate {
 
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("id_user")
-    @Expose
-    private Integer idUser;
-    @SerializedName("id_movie")
-    @Expose
-    private Integer idMovie;
-    @SerializedName("Comment")
-    @Expose
-    private String comment;
-    @SerializedName("Rate")
-    @Expose
-    private String rate;
-    @SerializedName("Datee")
-    @Expose
-    private String datee;
-    @SerializedName("id1")
-    @Expose
-    private Integer id1;
     @SerializedName("Name")
     @Expose
     private String name;
@@ -36,9 +18,9 @@ public class MyRatesResponse {
     @SerializedName("Type")
     @Expose
     private String type;
-    @SerializedName("Rate1")
+    @SerializedName("Rate")
     @Expose
-    private String rate1;
+    private String rate;
     @SerializedName("img_1")
     @Expose
     private String img1;
@@ -51,9 +33,9 @@ public class MyRatesResponse {
     @SerializedName("img_4")
     @Expose
     private String img4;
-    @SerializedName("Datee1")
+    @SerializedName("Datee")
     @Expose
-    private String datee1;
+    private String datee;
     @SerializedName("category")
     @Expose
     private String category;
@@ -76,54 +58,6 @@ public class MyRatesResponse {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
-    }
-
-    public Integer getIdMovie() {
-        return idMovie;
-    }
-
-    public void setIdMovie(Integer idMovie) {
-        this.idMovie = idMovie;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
-
-    public String getDatee() {
-        return datee;
-    }
-
-    public void setDatee(String datee) {
-        this.datee = datee;
-    }
-
-    public Integer getId1() {
-        return id1;
-    }
-
-    public void setId1(Integer id1) {
-        this.id1 = id1;
     }
 
     public String getName() {
@@ -150,12 +84,12 @@ public class MyRatesResponse {
         this.type = type;
     }
 
-    public String getRate1() {
-        return rate1;
+    public String getRate() {
+        return rate;
     }
 
-    public void setRate1(String rate1) {
-        this.rate1 = rate1;
+    public void setRate(String rate) {
+        this.rate = rate;
     }
 
     public String getImg1() {
@@ -190,12 +124,12 @@ public class MyRatesResponse {
         this.img4 = img4;
     }
 
-    public String getDatee1() {
-        return datee1;
+    public String getDatee() {
+        return datee;
     }
 
-    public void setDatee1(String datee1) {
-        this.datee1 = datee1;
+    public void setDatee(String datee) {
+        this.datee = datee;
     }
 
     public String getCategory() {

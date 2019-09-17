@@ -1,7 +1,9 @@
 package movies.compubase.com.moviess.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -13,9 +15,11 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.paperdb.Paper;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.data.API;
+import movies.compubase.com.moviess.helper.LocalHelper;
 import movies.compubase.com.moviess.helper.RetrofitClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,6 +40,12 @@ public class DialogActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private String id_user;
     private int id;
+    private String language;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.onAttach(newBase, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +58,26 @@ public class DialogActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = Objects.requireNonNull(intent.getExtras()).getInt("id");
 
-        preferences = getSharedPreferences("user",MODE_PRIVATE);
+        preferences = getSharedPreferences("user", MODE_PRIVATE);
         id_user = preferences.getString("id", "");
+        language = preferences.getString("lan", "");
+
+        if (language == null) {
+            Paper.book().write("language", "en");
+
+        }
+//        else {
+//            Paper.book().write("language", "ar");
+//            updateView((String) Paper.book().read("language"));
+//        }
+    }
+    private void updateView(String language) {
+
+        Context context = LocalHelper.setLocale(this, language);
+        Resources resources = context.getResources();
+
+        rateBtnMovie.setText(resources.getString(R.string.rate_now));
+        rateField.setText(resources.getString(R.string.write_comment));
     }
 
     @OnClick(R.id.rate_btn_movie)

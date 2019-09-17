@@ -28,15 +28,15 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"
-            android:background="@mipmap/ic_launcher"/>
+            android:layout_marginStart="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/ayman"
-            android:textSize="18sp"
+            android:text=""
+            android:id="@+id/user_name"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
 
@@ -77,6 +77,8 @@
                 android:layout_width="100dp"
                 android:layout_gravity="center"
                 android:layout_height="20dp"
+                android:id="@+id/rate_comment_design"
+                android:isIndicator="true"
                 android:background="@drawable/login_field_design"/>
 
             <LinearLayout
@@ -88,7 +90,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4.5"
+                    android:text=""
                     android:id="@+id/rate_num_txt_comment"
                     android:textStyle="bold"
                     android:layout_gravity="center"

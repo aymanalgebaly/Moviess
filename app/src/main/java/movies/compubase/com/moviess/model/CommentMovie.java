@@ -4,7 +4,7 @@ package movies.compubase.com.moviess.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ListOfComment {
+public class CommentMovie {
 
     @SerializedName("id")
     @Expose

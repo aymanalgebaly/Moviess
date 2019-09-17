@@ -91,7 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderHome
                 String type = listOfMoviesModel1.getType();
                 Integer id = listOfMoviesModel1.getId();
 
-                Toast.makeText(context, String.valueOf(id), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, String.valueOf(id), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context,MovieActivity.class);
 

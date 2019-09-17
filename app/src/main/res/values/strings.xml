@@ -72,5 +72,6 @@
     <string name="comments">Comments</string>
     <string name="age">Age</string>
     <string name="language">Language</string>
+    <string name="my_rates">My Rates</string>
 
 </resources>

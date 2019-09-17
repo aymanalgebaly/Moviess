@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:text="@string/registration"
             android:textStyle="bold"
+            android:id="@+id/reg_txt"
             android:textColor="@color/white"
             android:layout_below="@id/logo_img"
             android:gravity="center_horizontal"
@@ -156,6 +157,7 @@
             android:layout_height="wrap_content"
             android:text="@string/if_you_have_an_account"
             android:textColor="@color/gray"
+            android:id="@+id/if_you_reg"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp" />
 

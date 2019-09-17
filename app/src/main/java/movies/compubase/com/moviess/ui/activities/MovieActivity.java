@@ -1,25 +1,17 @@
 package movies.compubase.com.moviess.ui.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,30 +20,22 @@ import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import io.paperdb.Paper;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import movies.compubase.com.moviess.R;
 import movies.compubase.com.moviess.adapter.CommentAdapter;
-import movies.compubase.com.moviess.adapter.HomeAdapter;
-import movies.compubase.com.moviess.adapter.ImageSliderViewPagerAdapter;
-import movies.compubase.com.moviess.adapter.MovieAdapter;
 import movies.compubase.com.moviess.adapter.MovieSlideAdapter;
-import movies.compubase.com.moviess.adapter.MovieViewPagerAdapter;
 import movies.compubase.com.moviess.data.API;
+import movies.compubase.com.moviess.helper.LocalHelper;
 import movies.compubase.com.moviess.helper.RetrofitClient;
 import movies.compubase.com.moviess.helper.TinyDB;
-import movies.compubase.com.moviess.model.HomeModel;
-import movies.compubase.com.moviess.model.ListOfComment;
+import movies.compubase.com.moviess.model.CommentMovie;
 import movies.compubase.com.moviess.model.ListOfMoviesModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -83,7 +67,7 @@ public class MovieActivity extends AppCompatActivity {
 //    private ImageView imgMovieActivity;
     private TextView num_rate;
 //    private MovieViewPagerAdapter movieViewPagerAdapter;
-    private Button watchList_btn;
+    private TextView watchList_btn;
     private ListOfMoviesModel listOfMoviesModel;
     private List<ListOfMoviesModel> listOfMoviesModelArrayList = new ArrayList<>();
     private MovieSlideAdapter adapter;
@@ -91,7 +75,7 @@ public class MovieActivity extends AppCompatActivity {
     private int id;
     private SharedPreferences preferences;
     private String id_user;
-    private Button rate_btn,info_btn,comment_btn;
+    private TextView rate_btn,info_btn,comment_btn;
     private LinearLayout lin_info,lin_comm;
     private MaterialRatingBar ratingBar;
     private Float rate ;
@@ -99,21 +83,52 @@ public class MovieActivity extends AppCompatActivity {
     private TinyDB tinyDB;
     private int id_movie;
     private CommentAdapter comment_adapter;
-    private ListOfComment listOfComment;
-    private ArrayList<ListOfComment>listOfCommentArrayList = new ArrayList<>();
+    private CommentMovie listOfComment;
+    private ArrayList<CommentMovie> listOfCommentArrayList = new ArrayList<>();
 
+    TextView filmLanguage,category,duration,age,description,dateRelease;
+    private String s_id;
+    private String language;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.onAttach(newBase, "en"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        filmLanguage = findViewById(R.id.language_value);
+        category = findViewById(R.id.category_value);
+        duration = findViewById(R.id.duration_value);
+        age = findViewById(R.id.age_value);
+        description = findViewById(R.id.description_value);
+        dateRelease = findViewById(R.id.release_value);
+        info_btn = findViewById(R.id.info_btn);
+        comment_btn = findViewById(R.id.comment_btn);
+        watchList_btn = findViewById(R.id.add_watchList);
+        rate_btn = findViewById(R.id.rate_btn_movie_activity);
+
+
         rcvComments = findViewById(R.id.rcv_comments);
+
+        preferences = getSharedPreferences("user", MODE_PRIVATE);
+        language = preferences.getString("lan", "");
+
+        if (language == null) {
+            Paper.book().write("language", "en");
+
+        }
+//        else {
+//            Paper.book().write("language", "ar");
+//            updateView((String) Paper.book().read("language"));
+//        }
 
         lin_info = findViewById(R.id.lin_about_movie);
         lin_comm = findViewById(R.id.lin_comments);
 
-        info_btn = findViewById(R.id.info_btn);
         info_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +138,6 @@ public class MovieActivity extends AppCompatActivity {
         });
 
 
-        comment_btn = findViewById(R.id.comment_btn);
         comment_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +145,7 @@ public class MovieActivity extends AppCompatActivity {
                 lin_info.setVisibility(View.GONE);
 
                 setupRecyclerComment();
-                fetchDataComment();
+                fetchDataComment(s_id);
             }
         });
 
@@ -140,11 +154,17 @@ public class MovieActivity extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.rcv_movie);
-        watchList_btn = findViewById(R.id.add_watchList);
+
         watchList_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addWatchList();
+                if (id_user.isEmpty()){
+
+                    Toast.makeText(MovieActivity.this, "Please create account first", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    addWatchList();
+                }
             }
         });
 
@@ -157,41 +177,37 @@ public class MovieActivity extends AppCompatActivity {
 
              id = intent.getIntExtra("id", id_movie);
          }
+         s_id = String.valueOf(id);
 
-        Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-
-
-//        tabs = findViewById(R.id.tabs);
-//        viewPagerMovieActivity = findViewById(R.id.viewPager_movie_activity);
-//        tabs.setupWithViewPager(viewPagerMovieActivity);
-//        movieViewPagerAdapter = new MovieViewPagerAdapter(getSupportFragmentManager());
-//        viewPagerMovieActivity.setAdapter(movieViewPagerAdapter);
-
-
-        rate_btn = findViewById(R.id.rate_btn_movie_activity);
         rate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent1 = new Intent(MovieActivity.this,DialogActivity.class);
-                intent1.putExtra("id", id);
-                startActivity(intent1);
+                if (id_user.isEmpty()){
+                    Toast.makeText(MovieActivity.this, "Please create account first", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    Intent intent1 = new Intent(MovieActivity.this,DialogActivity.class);
+                    intent1.putExtra("id", id);
+                    startActivity(intent1);
+                }
             }
         });
 
-//        View root = tabs.getChildAt(0);
-//        if (root instanceof LinearLayout) {
-//            ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-//            GradientDrawable drawable = new GradientDrawable();
-//            drawable.setColor(getResources().getColor(R.color.black));
-//            drawable.setSize(2, 1);
-//            ((LinearLayout) root).setDividerPadding(10);
-//            ((LinearLayout) root).setDividerDrawable(drawable);
-//        }
-
-
         setupRecycler();
         fetchData();
+    }
+
+    private void updateView(String language) {
+
+        Context context = LocalHelper.setLocale(this, language);
+        Resources resources = context.getResources();
+
+        info_btn.setText(resources.getString(R.string.info));
+        comment_btn.setText(resources.getString(R.string.comments));
+
+        watchList_btn.setText(resources.getString(R.string.watchlist));
+        rate_btn.setText(resources.getString(R.string.rate_now));
     }
 
     private void setupRecyclerComment() {
@@ -204,10 +220,11 @@ public class MovieActivity extends AppCompatActivity {
 
     }
 
-    private void fetchDataComment() {
+    private void fetchDataComment(String s_id) {
 
         listOfCommentArrayList.clear();
-        Call<ResponseBody> call2 = RetrofitClient.getInstant().create(API.class).ListOfMovies();
+
+        Call<ResponseBody> call2 = RetrofitClient.getInstant().create(API.class).MovieByMovie(s_id);
 
         call2.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -219,20 +236,23 @@ public class MovieActivity extends AppCompatActivity {
 
                 try {
                     assert response.body() != null;
-                    List<ListOfComment> listOfComments = Arrays.asList(gson.fromJson(response.body().string(), ListOfComment[].class));
+                    List<CommentMovie> commentMovies = Arrays.asList(gson.fromJson(response.body().string(), CommentMovie[].class));
 
                     if (response.isSuccessful()) {
 
 
-                        for (int j = 0; j < listOfComments.size(); j++) {
+                        for (int j = 0; j < commentMovies.size(); j++) {
 
-                            listOfComment = new ListOfComment();
+                            listOfComment = new CommentMovie();
 
-                            listOfComment.setComment(listOfComments.get(j).getComment());
-                            listOfComment.setRate(listOfComments.get(j).getRate());
-                            listOfComment.setIdMovie(listOfComments.get(j).getIdMovie());
-                            listOfComment.setId(listOfComments.get(j).getId());
-                            listOfComment.setIdUser(listOfComments.get(j).getIdUser());
+                            listOfComment.setComment(commentMovies.get(j).getComment());
+                            listOfComment.setRate(commentMovies.get(j).getRate());
+                            listOfComment.setIdMovie(commentMovies.get(j).getIdMovie());
+                            listOfComment.setId(commentMovies.get(j).getId());
+                            listOfComment.setIdUser(commentMovies.get(j).getIdUser());
+                            listOfComment.setImages(commentMovies.get(j).getImages());
+                            listOfComment.setUsername(commentMovies.get(j).getUsername());
+
                         }
 
                         listOfCommentArrayList.add(listOfComment);
@@ -290,6 +310,25 @@ public class MovieActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new CenterScrollListener());
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                filmLanguage.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getLanguage());
+                category.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getType());
+                duration.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getDuration());
+                description.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getDes());
+                age.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getAgeRate());
+                dateRelease.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getReleaseDate());
+                num_rate.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate());
+                ratingBar.setRating(Float.parseFloat(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate()));
+
+                fetchDataComment(s_id);
+
+            }
+        });
     }
 
     private void fetchData() {

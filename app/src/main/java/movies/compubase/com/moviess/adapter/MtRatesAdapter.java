@@ -40,8 +40,9 @@ public class MtRatesAdapter extends RecyclerView.Adapter<MtRatesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        final MyRatesResponse myRatesResponse = myRatesResponseList.get(i);
 
+        final MyRatesResponse myRatesResponse = myRatesResponseList.get(i);
+        final Integer id = myRatesResponse.getId();
 
         Glide.with(context).load(myRatesResponse.getImg1()).placeholder(R.drawable.titanic).into(viewHolder.img);
 
@@ -50,7 +51,7 @@ public class MtRatesAdapter extends RecyclerView.Adapter<MtRatesAdapter.ViewHold
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ViewMyRatesActivity.class);
-//                intent.putExtra("ratesResponse",myRatesResponse);
+                intent.putExtra("id",id);
                 context.startActivity(intent);
             }
         });

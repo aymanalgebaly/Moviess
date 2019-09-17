@@ -27,7 +27,7 @@ public class LocalHelper {
         return setLocale(context,lang);
     }
 
-    private static Context setLocale(Context context, String lang) {
+    public static Context setLocale(Context context, String lang) {
 
         persis (context,lang);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -69,10 +69,12 @@ public class LocalHelper {
     private static void persis(Context context, String lang) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(SELECTED_LANGUAGE,lang);
         editor.apply();
     }
 
-    private static String getPersestedData(Context context, String language) {
+    public static String getPersestedData(Context context, String language) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 

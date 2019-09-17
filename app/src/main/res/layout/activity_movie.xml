@@ -134,28 +134,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             android:id="@+id/lin_btn"
             android:weightSum="2">
 
-            <Button
+            <TextView
                 android:layout_width="0dp"
                 android:text="@string/info"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:id="@+id/info_btn"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:background="@color/moov_three"
                 android:layout_weight="1"/>
 
-            <Button
+            <TextView
                 android:layout_width="0dp"
                 android:text="@string/comments"
+                android:gravity="center"
+                android:layout_height="match_parent"
                 android:id="@+id/comment_btn"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:layout_height="wrap_content"
                 android:background="@color/moov_three"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -179,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:id="@+id/category_value"
-                    android:text="@string/action"
+                    android:text=""
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:gravity="end"
@@ -191,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:id="@+id/duration_value"
-                    android:text="@string/_2_hours"
+                    android:text=""
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:gravity="start"
@@ -212,7 +214,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="@string/english"
+                    android:text=""
                     android:id="@+id/language_value"
                     android:layout_marginStart="2dp"
                     android:layout_marginEnd="2dp"
@@ -235,7 +237,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="@string/_16"
+                    android:text=""
                     android:textSize="12sp"
                     android:id="@+id/age_value"
                     android:gravity="start"
@@ -263,7 +265,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="18/10/2018"
+                    android:text=""
                     android:gravity="start"
                     android:id="@+id/release_value"
                     android:layout_marginStart="2dp"
@@ -283,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/description_value"
-                    android:text="@string/action_movie"
+                    android:text=""
                     android:textSize="12sp"
                     android:textColor="@color/white"
                     android:textStyle="bold"/>
@@ -338,13 +340,14 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <Button
+        <TextView
             android:id="@+id/add_watchList"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:text="@string/watchlist"
             android:layout_marginEnd="5dp"
+            android:gravity="center"
             android:background="@color/moov_three"
             android:textColor="@color/white"
             android:layout_marginTop="5dp"
@@ -352,13 +355,14 @@
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:layout_marginStart="20dp"/>
 
-        <Button
+        <TextView
             android:id="@+id/rate_btn_movie_activity"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="5dp"
+            android:gravity="center"
             android:background="@color/moov_three"
             android:textColor="@color/white"
             android:layout_marginStart="5dp"

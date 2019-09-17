@@ -1,5 +1,6 @@
 package movies.compubase.com.moviess.data;
 
+import movies.compubase.com.moviess.model.CommentMovie;
 import movies.compubase.com.moviess.model.LoginModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -72,4 +73,13 @@ public interface API {
             @Field("Images") String image,
             @Field("id") String id
     );
+
+    @FormUrlEncoded
+    @POST("select_comment_movie_by_movie")
+    Call<ResponseBody>MovieByMovie(
+            @Field("id_movie") String id_movie
+    );
+
+    @GET("select_movie_by_rate")
+    Call<ResponseBody>Recomendation();
 }
