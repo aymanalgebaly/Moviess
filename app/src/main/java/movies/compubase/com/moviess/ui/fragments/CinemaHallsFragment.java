@@ -27,4 +27,6 @@ public class CinemaHallsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_cinema_halls, container, false);
     }
 
+    
+
 }

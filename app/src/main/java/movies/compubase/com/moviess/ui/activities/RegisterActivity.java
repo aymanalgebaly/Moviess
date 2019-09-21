@@ -64,6 +64,11 @@ public class RegisterActivity extends AppCompatActivity {
     private String lannguage;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.onAttach(newBase, "en"));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -77,10 +82,11 @@ public class RegisterActivity extends AppCompatActivity {
         if (lannguage == null) {
             Paper.book().write("language", "en");
 
-        } else {
-            Paper.book().write("language", "ar");
-            updateView((String) Paper.book().read("language"));
         }
+//        else {
+//            Paper.book().write("language", "ar");
+//            updateView((String) Paper.book().read("language"));
+//        }
 
     }
 

@@ -77,6 +77,8 @@ public class HomeActivity extends AppCompatActivity
     private MenuItem item_home,item_reco,item_contact,item_myRate,item_moviies,item_watchList,item_tv,item_cinema,item_gift,item_logout;
     private Menu menu;
     private EditText search;
+    private String lang;
+    private DrawerLayout drawer;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -120,16 +122,16 @@ public class HomeActivity extends AppCompatActivity
 
         search = findViewById(R.id.search);
 
-        Paper.init(this);
+//        Paper.init(this);
 
         language = Paper.book().read("language");
         if (language == null) {
-            Paper.book().write("language", "en");
-        }
+//            Paper.book().write("language", "en");
+//        }
 //        else {
-//            Paper.book().write("language", "ar");
-//            updateView((String) Paper.book().read("language"));
-//          }
+            Paper.book().write("language", "ar");
+            updateView((String) Paper.book().read("language"));
+        }
 
         relativeLayout = findViewById(R.id.parent_search);
         search_toolbar = findViewById(R.id.home_activity_toolbar);
@@ -184,6 +186,16 @@ public class HomeActivity extends AppCompatActivity
         welcome.setText(string);
         settings.setText(string1);
 
+        SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
+
+        preferences = getSharedPreferences("user", MODE_PRIVATE);
+
+        editor.putBoolean("login", true);
+
+        editor.putString("lan",language);
+
+        editor.apply();
+
     }
 
     @Override
@@ -192,7 +204,7 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            super.finishAffinity();
         }
     }
 
@@ -265,8 +277,7 @@ public class HomeActivity extends AppCompatActivity
             editor.clear();
             editor.apply();
 
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-            finish();
+            finishAffinity();
 
         } else if (id == R.id.nav_contact) {
 
@@ -276,12 +287,25 @@ public class HomeActivity extends AppCompatActivity
             appBarLayout.setVisibility(View.GONE);
         }else if (id == R.id.layout_arabic){
             Paper.book().write("language","ar");
+            updateView((String)Paper.book().read("language"));
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+            Intent mIntent = getIntent();
+            finish();
+            startActivity(mIntent);
+
         }else if (id == R.id.layout_english){
             Paper.book().write("language","en");
+            updateView((String)Paper.book().read("language"));
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+
+            Intent mIntent = getIntent();
+            finish();
+            startActivity(mIntent);
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -289,7 +313,7 @@ public class HomeActivity extends AppCompatActivity
     public void displaySelectedFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);
-        fragmentTransaction.addToBackStack(null).commit();
+        fragmentTransaction.commit();
     }
 
     public void settingstxt(View view) {
