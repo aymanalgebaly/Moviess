@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         preferences = getSharedPreferences("user", MODE_PRIVATE);
         lannguage = preferences.getString("lan", "");
 
-        Toast.makeText(this, lannguage, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, lannguage, Toast.LENGTH_SHORT).show();
 
         if (lannguage == null) {
 //            Paper.book().write("language", "en");

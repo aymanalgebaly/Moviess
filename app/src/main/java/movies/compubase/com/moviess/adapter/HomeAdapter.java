@@ -65,7 +65,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderHome
 
         viewHolderHomeAdapter.num.setText(listOfMoviesModel.getRate());
 
-        viewHolderHomeAdapter.ratingBar.setRating(Float.parseFloat(listOfMoviesModel.getRate()));
+
+        //viewHolderHomeAdapter.ratingBar.setRating(Float.parseFloat(listOfMoviesModel.getRate()));
+        if (listOfMoviesModel.getRate() != null && !listOfMoviesModel.getRate().equals(""))
+            viewHolderHomeAdapter.ratingBar.setRating(Float.parseFloat(listOfMoviesModel.getRate()));
 
         Glide.with(context).load(listOfMoviesModel.getImg1()).placeholder(R.drawable.titanic).into(viewHolderHomeAdapter.img);
 

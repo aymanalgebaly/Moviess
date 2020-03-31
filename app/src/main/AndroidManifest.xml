@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="movies.compubase.com.moviess">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,6 +15,9 @@
         android:usesCleartextTraffic="true"
         android:roundIcon="@drawable/logo_out"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
+        tools:targetApi="m"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activities.ViewMyRatesActivity"></activity>
         <activity android:name=".ui.activities.DialogActivity" />

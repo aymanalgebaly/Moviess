@@ -122,15 +122,28 @@ public class HomeActivity extends AppCompatActivity
 
         search = findViewById(R.id.search);
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        drawer.setBackgroundResource(bg);
+        toggle.syncState();
+
 //        Paper.init(this);
 
         language = Paper.book().read("language");
         if (language == null) {
-//            Paper.book().write("language", "en");
-//        }
-//        else {
-            Paper.book().write("language", "ar");
-            updateView((String) Paper.book().read("language"));
+            Paper.book().write("language", "en");
+        }
+        else {
+            if(language.equals("ar"))
+            {
+                drawer.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            }else
+            {
+                drawer.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+
         }
 
         relativeLayout = findViewById(R.id.parent_search);
@@ -143,13 +156,6 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        drawer.setBackgroundResource(bg);
-        toggle.syncState();
 
         Glide.with(this).load(image).placeholder(R.drawable.user_defualt_img).into(imageView);
         textView.setText(username);

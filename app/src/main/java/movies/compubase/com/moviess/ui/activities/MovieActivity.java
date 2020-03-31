@@ -325,6 +325,8 @@ public class MovieActivity extends AppCompatActivity {
                 num_rate.setText(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate());
                 ratingBar.setRating(Float.parseFloat(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate()));
 
+                if (listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate() != null && !listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate().equals(""))
+                    ratingBar.setRating(Float.parseFloat(listOfMoviesModelArrayList.get(layoutManager.getCenterItemPosition()).getRate()));
                 fetchDataComment(s_id);
 
             }
