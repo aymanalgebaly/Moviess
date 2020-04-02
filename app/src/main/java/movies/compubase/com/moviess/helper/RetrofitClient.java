@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     public static Retrofit getInstant(){
         Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl("http://moive.compu-base.com/");
+        builder.baseUrl("http://movie.compu-base.com/");
         builder.addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
 
